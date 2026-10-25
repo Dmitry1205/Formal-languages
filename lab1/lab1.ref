@@ -1,6 +1,7 @@
 * Старт
 $ENTRY Go {
-  = <RunTests <Tests>>;
+*  = <RunTests <Tests>>;
+  = <Parse <Get 0>>
 }
 
 RunTests {
@@ -12,15 +13,14 @@ RunTests {
 
 Tests {
   = 
-*  ('^aXXaXXXcXXXd$ = ^X$');
-*  ('^aXbXa$ = ^dXeXl$');
-*  ('^aXbaXbbbXaaX$ = ^XXX$');
-*   ('^aXXXb$ = ^aXXXXb$');
-*    ('^XaXXaX$ = ^XabaX$');
-*    ('^Xasd(()X)sd(XX)$ = ^X$');
-*    ('^ab$ = ^ba$');
-     ('^aXb$ = ^X$');
-   
+  ('^aXXaXXXcXXXd$ = ^X$')
+  ('^aXbXa$ = ^dXeXl$')
+  ('^aXbaXbbbXaaX$ = ^XXX$')
+  ('^aXXXb$ = ^aXXXXb$')
+  ('^XaXXaX$ = ^XabaX$')
+  ('^Xasd(()X)sd(XX)$ = ^X$')
+  ('^ab$ = ^ba$')
+  ('^aXb$ = ^X$'); 
 }
 
 Trim {
@@ -180,7 +180,6 @@ CreateSRS {
     <CreateSRS '>' e.Str1 (e.Right) (e.n)>;
 
   '|START|' e.Str1 (e.Right) (e.n) = 
-    <Prout 'START -----------------------------------------------------' e.Str1>
     <Prout <IndexList e.Str1> ' -> %' <LTrim <IndexList e.Str1>> '[|CLS|>|' <IndexList <NextIter e.Str1>> '|'>
     <Prout '|CLS|>|' <IndexList <NextIter e.Str1>> '|' <IndexList <NextIter e.Str1>> ' -> ]<|PSP|' <IndexList <NextIter e.Str1>>>
     <Prout '|CLS|>|' <IndexList <NextIter e.Str1>> '|' 'GAMMA -> GAMMA|CLS|>|' <IndexList <NextIter e.Str1>> '|'>
