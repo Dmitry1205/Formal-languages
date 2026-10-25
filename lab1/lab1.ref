@@ -3,7 +3,6 @@ $ENTRY Go {
   = <RunTests <Tests>>;
 }
 
-* Тесты
 RunTests {
   /* empty */ = /* empty */;
   (e.Test) e.Ost =
@@ -13,6 +12,7 @@ RunTests {
 
 Tests {
   = 
+*  ('^aXXaXXXcXXXd$ = ^X$');
 *  ('^aXbXa$ = ^dXeXl$');
 *  ('^aXbaXbbbXaaX$ = ^XXX$');
 *   ('^aXXXb$ = ^aXXXXb$');
@@ -20,9 +20,9 @@ Tests {
 *    ('^Xasd(()X)sd(XX)$ = ^X$');
 *    ('^ab$ = ^ba$');
      ('^aXb$ = ^X$');
+   
 }
 
-* Функции для работы со строками
 Trim {
   '^' e.Str '$' = e.Str;
   e.Str = e.Str;
@@ -43,7 +43,6 @@ SplitAcc {
   (e.Part) s.C e.Rest = <SplitAcc (e.Part s.C) e.Rest>;
 }
 
-/* Печать: каждое слово с новой строки */
 ProutList {
   /* empty */ = /* empty */;
   e.Skip '>' (e.Part) e.Ost = <Prout '[' e.Part ']'>; 
@@ -76,7 +75,6 @@ FormatList {
   (e.Part) e.Rest = '(' e.Part ')' <FormatList e.Rest>;
 }
 
-/* Формат правой части: {} вместо X, слова без скобок */
 FormatRight {
   /* empty */ = /* empty */;
   (e.Word) = e.Word;
@@ -134,14 +132,12 @@ PSP {
     <Prout 'ALPHA<|PSP-| -> <|PSP-|'>
     <Prout '+<|PSP-| -> |PSP-|>'>
     <Prout '|PSP-|>ALPHA -> |PSP-|>'>
-*    <Prout '|PSP-|>] -> ]<|BACK|'>
 }
 
 CreateSRS {
   '|START|' '>' (e.Str1) (e.Right) (e.n) =
     <Prout e.Str1 '->^' e.Right '$'>;
   e.Str1 '>' (e.Right) (e.n)= 
-*    <Prout 'FINISH-----------------------------------' e.Str1>
     <Prout '<|UK' <Symb e.n> '|'<IndexList <BackIter e.Str1 '>'>>'!' <Symb e.n> '! -> <|DEL|?' e.Right '$'>
     <Prout 'ALPHA<|DEL| -> <|DEL|'>
     <Prout 'ALPHA]<|DEL| -> ALPHA<|OK|]'>
@@ -162,9 +158,7 @@ CreateSRS {
     <Prout '|CLR|>$ -> $'>;
 
   '|START|' s.z (e.Str0) () e.Str1 (e.Right) (e.n) =
-    <Prout 'START -----------------------------------------------------' e.Str1>
     <Prout e.Str0 ' -> %' <LTrim e.Str0> '[|CLS|>|EMPTY|'>
-*    <Prout '|CLS|>|EMPTY|ALPHA -> ]<|UK' <Symb e.n>'|!' <Symb e.n> '!ALPHA'>
     <Prout '|CLS|>|EMPTY|ALPHA -> ]<|PSP|ALPHA'>
     <Prout ']<|BACK|GAMMA -> <|HUNTER|GAMMA|CLS|>|EMPTY|'>
     <Prout ']<|BACK|$ -> |END|<$'>
@@ -188,7 +182,6 @@ CreateSRS {
   '|START|' e.Str1 (e.Right) (e.n) = 
     <Prout 'START -----------------------------------------------------' e.Str1>
     <Prout <IndexList e.Str1> ' -> %' <LTrim <IndexList e.Str1>> '[|CLS|>|' <IndexList <NextIter e.Str1>> '|'>
-*    <Prout '|CLS|>|' <IndexList <NextIter e.Str1>> '|' <IndexList <NextIter e.Str1>> ' -> ]<|UK' <Symb e.n>'|' <IndexList <NextIter e.Str1>> '!' <Symb e.n> '!'>
     <Prout '|CLS|>|' <IndexList <NextIter e.Str1>> '|' <IndexList <NextIter e.Str1>> ' -> ]<|PSP|' <IndexList <NextIter e.Str1>>>
     <Prout '|CLS|>|' <IndexList <NextIter e.Str1>> '|' 'GAMMA -> GAMMA|CLS|>|' <IndexList <NextIter e.Str1>> '|'>
     <Prout ']' <IndexList <NextIter e.Str1>> '<|BACK| -> <|HUNTER|' <IndexList <NextIter e.Str1>> '|CLS|>|' <IndexList <NextIter e.Str1>> '|'>
@@ -211,7 +204,6 @@ CreateSRS {
 
 
   e.Str1 '>' () e.Str2 (e.Right) (e.n) =
-*   <Prout 'SECOND-----------------------------------------------------' e.Str2>
     <Prout 'LAMBDAGAMMA<|UK' <Symb e.n> '| -> LAMBDA<|UK' <Symb e.n> '|GAMMA'>
     <Prout '[]<|UK' <Symb e.n> '| -> []|SKIP!' <Symb e.n> '|>|EMPTY|'>
     <Prout '@ALPHA<|UK' <Symb e.n> '| -> ALPHA@|SR|>|' 'ALPHA' '|'>
@@ -221,12 +213,10 @@ CreateSRS {
     <Prout '|SR|>|ALPHA|!' <Symb e.n> '!$ -> <|BACK|$'>
     <Prout '@]<|UK' <Symb e.n> '| -> ]|SKIP!' <Symb e.n> '|>|EMPTY|'>
     <Prout '|SKIP!' <Symb e.n> '|>|EMPTY|GAMMA -> GAMMA|SKIP!' <Symb e.n> '|>|EMPTY|'>
-    <Prout '|SKIP!' <Symb e.n> '|>|EMPTY|!' <Symb e.n> '! -> =>|EMPTY|'>
-    <Prout '=>|EMPTY|' ' -> <|UK' <Symb <Add e.n 1>> '|!' <Symb <Add e.n 1>> '!'>
+    <Prout '|SKIP!' <Symb e.n> '|>|EMPTY|!' <Symb e.n> '! -> <|UK' <Symb <Add e.n 1>> '|!' <Symb <Add e.n 1>> '!'>
     <CreateSRS '>' e.Str2 (e.Right) (<Add e.n 1>)>;
 
   e.Str1 (e.Right) (e.n) = 
-*    <Prout 'SECOND------------------------------------------------------' e.Str1>
     <Prout 'LAMBDAGAMMA<|UK' <Symb e.n> '| -> LAMBDA<|UK' <Symb e.n> '|GAMMA'>
     <Prout '[]<|UK' <Symb e.n> '| -> []|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|'>
     <Prout '@ALPHA<|UK' <Symb e.n> '| -> ALPHA@|SR|>|' 'ALPHA' '|'>
@@ -236,10 +226,9 @@ CreateSRS {
     <Prout '|SR|>|ALPHA|!' <Symb e.n> '!$ -> <|BACK|$'>
     <Prout '@]<|UK' <Symb e.n> '| -> ]|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|'>
     <Prout '|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|GAMMA -> GAMMA|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|'>
-    <Prout '|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|!' <Symb e.n> '! -> =>|' <IndexList e.Str1> '|'>
-    <Prout '=>|' <IndexList e.Str1> '|' <IndexList e.Str1> ' -> <|UK' <Symb <Add e.n 1>> '|' <IndexList e.Str1> '!' <Symb <Add e.n 1>> '!'>
-    <Prout '=>|' <IndexList e.Str1> '|GAMMA -> <|BACK|GAMMA'>
-    <Prout '=>|' <IndexList e.Str1> '|$ -> <|BACK|$'>
+    <Prout '|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|!' <Symb e.n> '!' <IndexList e.Str1> '-> <|UK' <Symb <Add e.n 1>> '|' <IndexList e.Str1> '!' <Symb <Add e.n 1>> '!'>
+    <Prout '|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|!' <Symb e.n> '!' 'GAMMA -> <|BACK|GAMMA'>
+    <Prout '|SKIP!' <Symb e.n> '|>|' <IndexList e.Str1> '|!' <Symb e.n> '!' '$ -> <|BACK|$'>
     <CreateSRS <NextIter e.Str1> (e.Right) (<Add e.n 1>)>;
 
     e.Str = <Prout e.Str>;
